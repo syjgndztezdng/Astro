@@ -16,30 +16,34 @@ def distance(pos1, pos2):
     return math.sqrt((pos1[0] - pos2[0]) ** 2 + (pos1[1] + pos2[1]) ** 2)
 
 
-a = int(simple_eval(input("The radius of the orbit(a.e.):"))) * 149.6 * 10 ** 6
-i = int(simple_eval(input("The angle to the plane of the orbit:"))) / 57.29577951308
-M1 = int(simple_eval(input("The mass of the first star(Mass of the Sun):"))) * 1.989 * 10 ** 30
-M2 = int(simple_eval(input("The mass of the second star(Mass of the Sun):"))) * 1.989 * 10 ** 30
+#a = int(simple_eval(input("The radius of the orbit(a.e.):"))) * 149.6 * 10 ** 6
+#i = int(simple_eval(input("The angle to the plane of the orbit:"))) / 57.29577951308
+#M1 = int(simple_eval(input("The mass of the first star(Mass of the Sun):"))) * 1.989 * 10 ** 30
+#M2 = int(simple_eval(input("The mass of the second star(Mass of the Sun):"))) * 1.989 * 10 ** 30
 
-#a = 10 * 149.6 * 10 ** 6
-#i = 0 / 57.29577951308
-#M1 = 5 * 1.989 * 10 ** 30
-#M2 = 5 * 1.989 * 10 ** 30
+a = 10 * 149.6 * 10 ** 6
+i = 90 / 57.29577951308
+M1 = 5 * 1.989 * 10 ** 30
+M2 = 5 * 1.989 * 10 ** 30
 
 #первая звезда - красная
 
 WIDTH = 800 #1 пиксель = 0.2 ае
-HEIGHT = 700
+HEIGHT = 600
 FPS = 30
-height_graf = 50
+height_graf = 100
 koef = 10 ** 6
-koef1 = int(input())
+koef1 = 15
 k_len = 10 / 149.6 / 10 ** 6 #отношение пикселей к реал длине
 angle_F = 1
 nak = 0
-grid = 20 #������
+grid = 20 #четное
+time = 0
 
 P = math.sqrt(4 * math.pi * a ** 3 / scipy.constants.G / (M1 + M2)) #период
+V0 = 2 * math.pi * a / P #скалярная величина круг. скорости
+max_graf = abs(V0 * math.sin(i)) #максимальное значение графика
+k_graf = (height_graf + 20) / max_graf
 v1 = (0, koef1 * math.sqrt(scipy.constants.G * M1 / a)) #начальная скорость
 v2 = (0, -1 * koef1 * math.sqrt(scipy.constants.G * M2 / a)) 
 pos1 = (-1 * a, 0.01)
@@ -51,7 +55,8 @@ nol = (WIDTH / 2, HEIGHT / 2)
 cen_graf = (WIDTH / 2, HEIGHT - height_graf)
 T = math.sqrt((4 * math.pi ** 2 * a ** 3) / scipy.constants.G * (M1 + M2))
 
-GRID_CLR = (0, 0, 100)
+GRF_CLR = (197, 208, 230)
+GRID_CLR = (10, 95, 173)
 CLR1 = (253, 0, 110)
 CLR2 = (25, 0, 253)
 BLACK = (0, 0, 0)
@@ -96,9 +101,20 @@ while running:
         pygame.draw.line(screen, GRID_CLR, [WIDTH / grid * I, nol[1] + nol[1] * nak], [WIDTH / grid * I, nol[1] - nol[1] * nak])
         pygame.draw.line(screen, GRID_CLR, [WIDTH / grid * I + nol[0], nol[1] + nol[1] * nak], [WIDTH / grid * I + nol[0], nol[1] - nol[1] * nak])
 
-    pygame.draw.circle(screen, CLR1, [k_len * pos1[0] + nol[0], k_len * nak * pos1[1] + nol[1]], 5)
-    pygame.draw.circle(screen, CLR2, [k_len * pos2[0] + nol[0], k_len * nak * pos2[1] + nol[1]], 5)
-        
+    #звезды
+    pygame.draw.circle(screen, CLR1, [k_len * pos1[0] + nol[0], k_len * nak * pos1[1] + nol[1]], 7)
+    pygame.draw.circle(screen, CLR2, [k_len * pos2[0] + nol[0], k_len * nak * pos2[1] + nol[1]], 7)
+    
+    #график
+    time += 1 / FPS #время в секундах
+
+    pygame.draw.rect(screen, BLACK, (0, HEIGHT - 2 * height_graf, WIDTH, 2 * height_graf))
+    pygame.draw.rect(screen, GRF_CLR, (0, HEIGHT - 2 * height_graf, WIDTH, 2 * height_graf), 5)
+
+    for i_graf in range(0, int(nol[0]) + 1):
+        y1 = k_graf * V0 * math.cos(2 * math.pi * (time + i_graf / FPS) / P) * math.sin(i)
+        y2 = k_graf * V0 * math.cos(2 * math.pi * (time + (i_graf - 1) / FPS) / P) * math.sin(i)
+        pygame.draw.line(screen, CLR1, (nol[0] - i_graf, HEIGHT - height_graf - y1), (nol[0] - i_graf - 1, HEIGHT - height_graf - y2))
     #остальное
     pygame.display.flip()
     clock.tick(FPS)

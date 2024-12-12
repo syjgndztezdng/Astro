@@ -22,7 +22,7 @@ def distance(pos1, pos2):
 #M2 = int(simple_eval(input("The mass of the second star(Mass of the Sun):"))) * 1.989 * 10 ** 30
 
 a = 10 * 149.6 * 10 ** 6
-i = 60 / 57.29577951308
+i = 0 / 57.29577951308
 M1 = 5 * 1.989 * 10 ** 30
 M2 = 5 * 1.989 * 10 ** 30
 
@@ -43,8 +43,11 @@ time = 0
 
 P = math.sqrt(4 * math.pi * a ** 3 / scipy.constants.G / (M1 + M2)) #период
 V0 = 2 * math.pi * a / P #скалярная величина круг. скорости
-max_graf = abs(V0 * math.sin(i)) #максимальное значение графика
-k_graf = (height_graf - 10) / max_graf
+if i = 0:
+    k_graf = 0
+else:
+    max_graf = abs(V0 * math.sin(i)) #максимальное значение графика
+    k_graf = (height_graf - 10) / max_graf
 v1 = (0, koef1 * math.sqrt(scipy.constants.G * M1 / a)) #начальная скорость
 v2 = (0, -1 * koef1 * math.sqrt(scipy.constants.G * M2 / a)) 
 pos1 = (-1 * a, 0.01)

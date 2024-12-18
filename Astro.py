@@ -27,7 +27,7 @@ M1 = 5 * 1.989 * 10 ** 30
 M2 = 5 * 1.989 * 10 ** 30
 
 #первая звезда - красная
-
+G = 6.6743 * 10 ** -11
 WIDTH = 800 #1 пиксель = 0.2 ае
 HEIGHT = 600
 FPS = 30
@@ -41,12 +41,12 @@ nak = 0
 grid = 20 #четное
 time = 0
 
-P = math.sqrt(4 * math.pi * a ** 3 / scipy.constants.G / (M1 + M2)) #период
+P = math.sqrt(4 * math.pi * 8 * a ** 3 / G / (M1 + M2)) #период
 V0 = 2 * math.pi * a / P #скалярная величина круг. скорости
 max_graf = abs(V0 * math.sin(i)) #максимальное значение графика
 k_graf = (height_graf - 10) / max_graf
-v1 = (0, koef1 * math.sqrt(scipy.constants.G * M1 / a)) #начальная скорость
-v2 = (0, -1 * koef1 * math.sqrt(scipy.constants.G * M2 / a)) 
+v1 = (0, koef1 * math.sqrt(G * M1 / a)) #начальная скорость
+v2 = (0, -1 * koef1 * math.sqrt(G * M2 / a)) 
 pos1 = (-1 * a, 0.01)
 pos2 = (a, -0.01)
 F1 = (0, 0)
@@ -54,7 +54,6 @@ F2 = (0, 0)
 
 nol = (WIDTH / 2, HEIGHT / 2)
 cen_graf = (WIDTH / 2, HEIGHT - height_graf)
-T = math.sqrt((4 * math.pi ** 2 * a ** 3) / scipy.constants.G * (M1 + M2))
 
 GRF_CLR = (197, 208, 230)
 GRID_CLR = (10, 95, 173)
@@ -82,7 +81,7 @@ while running:
 
     #математика
     angle_F = math.atan((pos1[1] - pos2[1]) / (pos1[0] - pos2[0]))
-    F_mg = (scipy.constants.G / 1000) * M1 * M2 / (distance(pos1, pos2) ** 2)
+    F_mg = (G / 1000) * M1 * M2 / (distance(pos1, pos2) ** 2)
     F1 = (F_mg * math.cos(angle_F), 
           F_mg * math.sin(angle_F))
 
